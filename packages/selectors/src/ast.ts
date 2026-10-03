@@ -11,9 +11,10 @@
 //
 // So the AST stays exported, through one named subpath instead of being
 // reachable from anywhere: `src/sdk/selectors.ts` is its only consumer, and
-// `facade-symbols.ts` pins this list to exactly what v0.20.5 shipped. Widening
-// it means widening the public package, and the gate makes that a deliberate
-// edit rather than a side effect.
+// that file's explicit export list is the pin (the `facade-symbols.ts` table
+// that used to hold it was retired in #1574). Widening this list widens the
+// public package, so a widened name also records in the published API surface,
+// `website/docs/docs/client-api.md`.
 import type { SelectorChain } from './internal/parse.ts';
 import { formatSelectorFailure as formatSelectorFailureFromText } from './internal/resolve.ts';
 import type { SelectorDiagnostics } from './internal/public-resolution-types.ts';
@@ -22,7 +23,11 @@ export type { SelectorChain } from './internal/parse.ts';
 export type { SelectorDiagnostics } from './internal/public-resolution-types.ts';
 
 export { isSelectorToken, parseSelectorChain, tryParseSelectorChain } from './internal/parse.ts';
-export { findSelectorChainMatch, resolveSelectorChain } from './internal/resolve.ts';
+export {
+  findSelectorChainMatch,
+  listSelectorChainMatches,
+  resolveSelectorChain,
+} from './internal/resolve.ts';
 export { isNodeEditable, isNodeVisible } from './internal/node.ts';
 
 /**
